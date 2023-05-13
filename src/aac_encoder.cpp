@@ -1,7 +1,8 @@
 #include <Arduino.h>
+//#include <sha1.h>
+#include <SD.h>
 
 #include "AACEncoderFDK.h"
-#include <SD.h>
 
 using namespace aac_fdk;
 
@@ -9,14 +10,26 @@ File out;
 
 void dataCallback(uint8_t *aac_data, size_t len) {
     out.write(aac_data, len);
+    //Sha1.write(aac_data, len);
 }
 
 AACEncoderFDK aac(dataCallback);
 AudioInfo info;
 int16_t buffer[512];
 
+String getHash(uint8_t* hash) {
+    int i;
+    String hashStr;
+    for (i=0; i<20; i++) {
+        hashStr += ("0123456789abcdef"[hash[i]>>4]);
+        hashStr += ("0123456789abcdef"[hash[i]&0xf]);
+    }
+    return hashStr;
+}
+
 // Convert to m4a `ffmpeg -i in.aac -vn -acodec copy out.m4a`
-void encodeToAAC(File in, File o) {
+String encodeToAAC(File in, File o) {
+    //Sha1.init();
     out = o;
     in.seek(44); // Skip wav header 
 
@@ -49,4 +62,5 @@ void encodeToAAC(File in, File o) {
     Serial.println(total/count);
     out.close();
     Serial.println("done");
+    return "sha1";//getHash(Sha1.result());
 }

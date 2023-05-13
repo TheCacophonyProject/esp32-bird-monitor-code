@@ -1,3 +1,3 @@
 #include <SD.h>
 
-void encodeToAAC(File wavIn, File aacOut);
+String encodeToAAC(File wavIn, File aacOut);

@@ -12,15 +12,23 @@
 
 #define WAV_RECORDING_FILE "/recording.wav"
 #define AAC_RECORDING_FILE "/recording.aac"
+#define DATA_FILE "/data.txt"
 
 #define MIN_HIBERNATION 40*60
 #define MAX_HIBERNATION 60*60
-#define RECORDING_DURATION 10000
+#define RECORDING_DURATION 20000
+
+#define LONGITUDE 1
+#define LATITUDE 2
+
+#define PWM1_Ch 0
+
+#define VERSION 2   //TODO get precompile to make this from git tags
 
 #define RECORDINGS_DIR "/recordings"
 
-#define NUM_RECORDINGS_WHEN_UPLOAD 10
+#define NUM_RECORDINGS_WHEN_UPLOAD 1
 
-#define SERVER "192.168.1.9"
+#define SERVER "192.168.178.86"
 #define PORT 8051
 #define UPLOAD_PATH "/upload"

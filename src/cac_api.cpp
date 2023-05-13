@@ -26,7 +26,7 @@ void registerDevice() {
 
 
 //https://github.com/adjavaherian/solar-server/blob/master/lib/Poster/Poster.cpp
-void postRecording(File file, String metadata) {
+bool postRecording(File file, String metadata) {
   //WiFiClientSecure client;
   WiFiClient client;
   String boundary = makeBoundaryStr();
@@ -40,7 +40,7 @@ void postRecording(File file, String metadata) {
 
   if (!client.connect(SERVER, PORT)) {
     Serial.println("http post connection failed");
-    return;
+    return false;
   }
 
   // post header
@@ -121,9 +121,17 @@ void postRecording(File file, String metadata) {
   Serial.println("request sent");
   String responseHeaders = "";
 
+
+  bool httpOKResponse = false;
   while (client.connected()) {
     String line = client.readStringUntil('\n');
+    if (line.startsWith("200 OK", 9)) {
+      Serial.println("200 response from server");
+      httpOKResponse = true;
+    }
+    //stringOne.startsWith("200 OK", 9)
     Serial.println(line);
+    Serial.println(line.endsWith("200 OK\n"));
     responseHeaders += line;
     if (line == "\r") {
       Serial.println("headers received");
@@ -141,5 +149,5 @@ void postRecording(File file, String metadata) {
 
   // close the file:
   file.close();
-
+  return httpOKResponse;
 }
